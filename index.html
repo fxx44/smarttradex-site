@@ -1,174 +1,128 @@
-<!DOCTYPE HTML>
-<!--
-	Spectral by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
-	<head>
-		<title>Spectral by HTML5 UP</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="landing is-preload">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartTradeX Wallet</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+</head>
+<body>
 
-		<!-- Page Wrapper -->
-			<div id="page-wrapper">
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCJLljxvFAKEKEYvGwLbHvMb-KSaDZaLEQ",
+    authDomain: "smarttradex-wallet.firebaseapp.com",
+    databaseURL: "https://smarttradex-wallet-default-rtdb.firebaseio.com",
+    projectId: "smarttradex-wallet",
+    storageBucket: "smarttradex-wallet.appspot.com",
+    messagingSenderId: "282405576205",
+    appId: "1:282405576205:web:12fd6c2647a55a81a7e502"
+  };
 
-				<!-- Header -->
-					<header id="header" class="alt">
-						<h1><a href="index.html">Spectral</a></h1>
-						<nav id="nav">
-							<ul>
-								<li class="special">
-									<a href="#menu" class="menuToggle"><span>Menu</span></a>
-									<div id="menu">
-										<ul>
-											<li><a href="index.html">Home</a></li>
-											<li><a href="generic.html">Generic</a></li>
-											<li><a href="elements.html">Elements</a></li>
-											<li><a href="#">Sign Up</a></li>
-											<li><a href="#">Log In</a></li>
-										</ul>
-									</div>
-								</li>
-							</ul>
-						</nav>
-					</header>
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  let walletId = localStorage.getItem('walletId') || '';
 
-				<!-- Banner -->
-					<section id="banner">
-						<div class="inner">
-							<h2>Spectral</h2>
-							<p>Another fine responsive<br />
-							site template freebie<br />
-							crafted by <a href="http://html5up.net">HTML5 UP</a>.</p>
-							<ul class="actions special">
-								<li><a href="#" class="button primary">Activate</a></li>
-							</ul>
-						</div>
-						<a href="#one" class="more scrolly">Learn More</a>
-					</section>
+  function promptWalletId() {
+    if (!walletId) {
+      walletId = prompt("Please enter your Wallet ID or username:");
+      if (walletId) {
+        localStorage.setItem('walletId', walletId);
+      } else {
+        alert("Wallet ID is required to continue.");
+      }
+    }
+  }
 
-				<!-- One -->
-					<section id="one" class="wrapper style1 special">
-						<div class="inner">
-							<header class="major">
-								<h2>Arcu aliquet vel lobortis ata nisl<br />
-								eget augue amet aliquet nisl cep donec</h2>
-								<p>Aliquam ut ex ut augue consectetur interdum. Donec amet imperdiet eleifend<br />
-								fringilla tincidunt. Nullam dui leo Aenean mi ligula, rhoncus ullamcorper.</p>
-							</header>
-							<ul class="icons major">
-								<li><span class="icon fa-gem major style1"><span class="label">Lorem</span></span></li>
-								<li><span class="icon fa-heart major style2"><span class="label">Ipsum</span></span></li>
-								<li><span class="icon solid fa-code major style3"><span class="label">Dolor</span></span></li>
-							</ul>
-						</div>
-					</section>
+  promptWalletId();
 
-				<!-- Two -->
-					<section id="two" class="wrapper alt style2">
-						<section class="spotlight">
-							<div class="image"><img src="images/pic01.jpg" alt="" /></div><div class="content">
-								<h2>Magna primis lobortis<br />
-								sed ullamcorper</h2>
-								<p>Aliquam ut ex ut augue consectetur interdum. Donec hendrerit imperdiet. Mauris eleifend fringilla nullam aenean mi ligula.</p>
-							</div>
-						</section>
-						<section class="spotlight">
-							<div class="image"><img src="images/pic02.jpg" alt="" /></div><div class="content">
-								<h2>Tortor dolore feugiat<br />
-								elementum magna</h2>
-								<p>Aliquam ut ex ut augue consectetur interdum. Donec hendrerit imperdiet. Mauris eleifend fringilla nullam aenean mi ligula.</p>
-							</div>
-						</section>
-						<section class="spotlight">
-							<div class="image"><img src="images/pic03.jpg" alt="" /></div><div class="content">
-								<h2>Augue eleifend aliquet<br />
-								sed condimentum</h2>
-								<p>Aliquam ut ex ut augue consectetur interdum. Donec hendrerit imperdiet. Mauris eleifend fringilla nullam aenean mi ligula.</p>
-							</div>
-						</section>
-					</section>
+  let currentBalance = 0;
+  const updateBalanceDisplay = () => {
+    document.getElementById('wallet-balance').innerText = `$${currentBalance.toFixed(2)}`;
+  };
 
-				<!-- Three -->
-					<section id="three" class="wrapper style3 special">
-						<div class="inner">
-							<header class="major">
-								<h2>Accumsan mus tortor nunc aliquet</h2>
-								<p>Aliquam ut ex ut augue consectetur interdum. Donec amet imperdiet eleifend<br />
-								fringilla tincidunt. Nullam dui leo Aenean mi ligula, rhoncus ullamcorper.</p>
-							</header>
-							<ul class="features">
-								<li class="icon fa-paper-plane">
-									<h3>Arcu accumsan</h3>
-									<p>Augue consectetur sed interdum imperdiet et ipsum. Mauris lorem tincidunt nullam amet leo Aenean ligula consequat consequat.</p>
-								</li>
-								<li class="icon solid fa-laptop">
-									<h3>Ac Augue Eget</h3>
-									<p>Augue consectetur sed interdum imperdiet et ipsum. Mauris lorem tincidunt nullam amet leo Aenean ligula consequat consequat.</p>
-								</li>
-								<li class="icon solid fa-code">
-									<h3>Mus Scelerisque</h3>
-									<p>Augue consectetur sed interdum imperdiet et ipsum. Mauris lorem tincidunt nullam amet leo Aenean ligula consequat consequat.</p>
-								</li>
-								<li class="icon solid fa-headphones-alt">
-									<h3>Mauris Imperdiet</h3>
-									<p>Augue consectetur sed interdum imperdiet et ipsum. Mauris lorem tincidunt nullam amet leo Aenean ligula consequat consequat.</p>
-								</li>
-								<li class="icon fa-heart">
-									<h3>Aenean Primis</h3>
-									<p>Augue consectetur sed interdum imperdiet et ipsum. Mauris lorem tincidunt nullam amet leo Aenean ligula consequat consequat.</p>
-								</li>
-								<li class="icon fa-flag">
-									<h3>Tortor Ut</h3>
-									<p>Augue consectetur sed interdum imperdiet et ipsum. Mauris lorem tincidunt nullam amet leo Aenean ligula consequat consequat.</p>
-								</li>
-							</ul>
-						</div>
-					</section>
+  const addTransaction = (type, amount) => {
+    const li = document.createElement("li");
+    li.textContent = `${type}: $${amount.toFixed(2)} - ${new Date().toLocaleString()}`;
+    document.getElementById("transaction-history").prepend(li);
+    db.ref(`wallets/${walletId}/transactions`).push({
+      type,
+      amount,
+      timestamp: new Date().toISOString()
+    });
+  };
 
-				<!-- CTA -->
-					<section id="cta" class="wrapper style4">
-						<div class="inner">
-							<header>
-								<h2>Arcue ut vel commodo</h2>
-								<p>Aliquam ut ex ut augue consectetur interdum endrerit imperdiet amet eleifend fringilla.</p>
-							</header>
-							<ul class="actions stacked">
-								<li><a href="#" class="button fit primary">Activate</a></li>
-								<li><a href="#" class="button fit">Learn More</a></li>
-							</ul>
-						</div>
-					</section>
+  const topUpWallet = () => {
+    const amount = parseFloat(document.getElementById('amount').value);
+    if (!isNaN(amount) && amount > 0) {
+      currentBalance += amount;
+      updateBalanceDisplay();
+      addTransaction("Top-up", amount);
+      db.ref(`wallets/${walletId}/balance`).set(currentBalance);
+      alert('Wallet successfully topped up!');
+    } else {
+      alert('Please enter a valid amount.');
+    }
+  };
 
-				<!-- Footer -->
-					<footer id="footer">
-						<ul class="icons">
-							<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
-							<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-							<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-							<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
-							<li><a href="#" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-						</ul>
-						<ul class="copyright">
-							<li>&copy; Untitled</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-						</ul>
-					</footer>
+  const withdrawFromWallet = () => {
+    const amount = parseFloat(document.getElementById('amount').value);
+    if (!isNaN(amount) && amount > 0 && amount <= currentBalance) {
+      currentBalance -= amount;
+      updateBalanceDisplay();
+      addTransaction("Withdrawal", amount);
+      db.ref(`wallets/${walletId}/balance`).set(currentBalance);
+      alert('Withdrawal successful!');
+    } else {
+      alert('Invalid withdrawal amount.');
+    }
+  };
 
-			</div>
+  window.onload = () => {
+    db.ref(`wallets/${walletId}/balance`).once('value').then(snapshot => {
+      if (snapshot.exists()) {
+        currentBalance = parseFloat(snapshot.val());
+        updateBalanceDisplay();
+      }
+    });
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+    db.ref(`wallets/${walletId}/transactions`).once('value').then(snapshot => {
+      snapshot.forEach(child => {
+        const data = child.val();
+        const li = document.createElement("li");
+        li.textContent = `${data.type}: $${parseFloat(data.amount).toFixed(2)} - ${new Date(data.timestamp).toLocaleString()}`;
+        document.getElementById("transaction-history").prepend(li);
+      });
+    });
+  };
+</script>
 
-	</body>
+<main class="container">
+  <h1>🪙 SmartTradeX Wallet</h1>
+  <p>Manage and top-up your SmartTradeX wallet securely.</p>
+
+  <section>
+    <h2>💵 Current Balance: <span id="wallet-balance">$0.00</span></h2>
+    <form onsubmit="event.preventDefault(); topUpWallet();">
+      <input type="number" id="amount" placeholder="Amount to Top-up" required>
+      <select id="paymentMethod">
+        <option value="">- Select Payment Method -</option>
+        <option value="credit">Credit Card</option>
+        <option value="paypal">PayPal</option>
+        <option value="crypto">Cryptocurrency</option>
+      </select>
+      <button type="submit">Top-up Wallet</button>
+      <button type="button" onclick="withdrawFromWallet()">Withdraw</button>
+    </form>
+  </section>
+
+  <section>
+    <h3>📜 Transaction History</h3>
+    <ul id="transaction-history"></ul>
+  </section>
+</main>
+
+</body>
 </html>
